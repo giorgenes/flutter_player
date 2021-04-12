@@ -86,11 +86,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    List<Widget> listViewItems;
-
-    listViewItems = [
+  List<Widget> buildSongWidgets() {
+    return ([
       for (Song song in songs)
         SongWidget(
           song: song,
@@ -99,56 +96,59 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             play(song, context);
           },
         )
-    ];
+    ]);
+  }
 
-    List<Widget> widgets = [
-      SearchWidget(
+  Widget buildSearchWidget() => SearchWidget(
         onSubmitted: (String query) {
           performSearch(query);
         },
         controller: _searchController,
-      )
-    ];
+      );
 
-    if (songs.isEmpty) {
-      widgets.add(
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                'To start, search for songs/artists in the input above!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                ),
+  Widget buildEmptyPlaceholder() => Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: Text(
+              'To start, search for songs/artists in the input above!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 25.0,
               ),
             ),
           ),
         ),
       );
-    } else {
-      widgets.add(
-        Expanded(
-          child: ListView(
-            children: listViewItems,
-          ),
+
+  Widget buildSongList() => Expanded(
+        child: ListView(
+          children: buildSongWidgets(),
         ),
       );
+
+  Widget buildControlWidget() => PlayerControlWidget(
+        onPause: () {
+          pause();
+        },
+        onPlay: () {
+          resume();
+        },
+        isPlaying: isPlaying,
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgets = [buildSearchWidget()];
+
+    if (songs.isEmpty) {
+      widgets.add(buildEmptyPlaceholder());
+    } else {
+      widgets.add(buildSongList());
     }
 
     if (showPlayer) {
-      widgets.add(
-        PlayerControlWidget(
-          onPause: () {
-            pause();
-          },
-          onPlay: () {
-            resume();
-          },
-          isPlaying: isPlaying,
-        ),
-      );
+      widgets.add(buildControlWidget());
     }
 
     return Scaffold(
