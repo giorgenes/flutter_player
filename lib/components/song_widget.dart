@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'song.dart';
+import '../song.dart';
 
 class SongWidget extends StatelessWidget {
   final Song song;

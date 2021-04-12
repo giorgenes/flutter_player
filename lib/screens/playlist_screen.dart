@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sample_player_app/search_widget.dart';
-import 'package:sample_player_app/song_widget.dart';
+import 'package:sample_player_app/components/search_widget.dart';
+import 'package:sample_player_app/components/song_widget.dart';
 import 'package:sample_player_app/song.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:sample_player_app/song_finder.dart';
-import 'package:sample_player_app/player_control_widget.dart';
+import 'package:sample_player_app/components/player_control_widget.dart';
 
 class PlaylistScreen extends StatefulWidget {
   PlaylistScreen({Key key, this.title}) : super(key: key);
