@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:sample_player_app/search_widget.dart';
 import 'song_widget.dart';
 import 'song.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -116,35 +117,54 @@ class _MyHomePageState extends State<MyHomePage> {
         )
     ];
 
-    listViewItems.insert(
-      0,
-      Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: TextField(
-          controller: _searchController,
-          onSubmitted: (String value) {
-            performSearch(value);
-          },
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: 'Search artist',
-          ),
-        ),
-      ),
-    );
+    // listViewItems.insert(
+    //   0,
+    //   Padding(
+    //     padding: const EdgeInsets.all(15.0),
+    //     child: TextField(
+    //       controller: _searchController,
+    //       onSubmitted: (String value) {
+    //         performSearch(value);
+    //       },
+    //       decoration: InputDecoration(
+    //         border: OutlineInputBorder(),
+    //         labelText: 'Search artist',
+    //       ),
+    //     ),
+    //   ),
+    // );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView(
-          children: listViewItems
-          // TODO: Add padding at the end to account for the play nav at the bottom
-          ,
-        ),
+      body: Column(
+        children: [
+          SearchWidget(
+            onSubmitted: (String query) {
+              performSearch(query);
+            },
+            controller: _searchController,
+          ),
+          Expanded(
+            child: ListView(
+              children: listViewItems,
+            ),
+          ),
+          PlayerControlWidget(
+            isPlaying: isPlaying,
+          ),
+        ],
       ),
     );
   }
 }
+
+// Padding(
+// padding: const EdgeInsets.all(15.0),
+// child: ListView(
+// children: listViewItems
+// // TODO: Add padding at the end to account for the play nav at the bottom
+// ,
+// ),
+// )

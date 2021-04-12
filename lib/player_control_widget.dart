@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class PlayerControlWidget extends StatelessWidget {
+  final bool isPlaying;
+
+  PlayerControlWidget({this.isPlaying});
+
   @override
   Widget build(BuildContext context) {
     return Container(
