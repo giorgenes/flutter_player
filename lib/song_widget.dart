@@ -11,6 +11,17 @@ class SongWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget statusWidget;
+
+    if (isPlaying) {
+      statusWidget = SpinKitWave(
+        color: Colors.black,
+        size: 25.0,
+      );
+    } else {
+      statusWidget = Icon(Icons.play_arrow, size: 45.0);
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0, left: 15.0, right: 15.0),
       child: GestureDetector(
@@ -59,10 +70,7 @@ class SongWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SpinKitWave(
-                color: Colors.black,
-                size: 25.0,
-              ),
+              statusWidget,
             ],
           ),
         ),

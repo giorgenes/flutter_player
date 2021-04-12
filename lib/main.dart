@@ -44,6 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Song> songs = [];
   AudioPlayer player;
   bool isPlaying = false;
+  bool showPlayer = false;
+  Song currentSong;
 
   @override
   void initState() {
@@ -86,20 +88,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (result == 1) {
       setState(() {
         isPlaying = true;
+        showPlayer = true;
+        currentSong = song;
       });
-
-      OverlayState overlayState = Overlay.of(context);
-
-      overlayState.insert(
-        OverlayEntry(
-          builder: (context) => Positioned(
-            bottom: 0.0,
-            left: 0,
-            right: 0,
-            child: PlayerControlWidget(),
-          ),
-        ),
-      );
     }
   }
 
@@ -111,50 +102,44 @@ class _MyHomePageState extends State<MyHomePage> {
       for (Song song in songs)
         SongWidget(
           song: song,
+          isPlaying: (song == currentSong && isPlaying),
           onPlay: (Song song) {
             play(song, context);
           },
         )
     ];
 
-    // listViewItems.insert(
-    //   0,
-    //   Padding(
-    //     padding: const EdgeInsets.all(15.0),
-    //     child: TextField(
-    //       controller: _searchController,
-    //       onSubmitted: (String value) {
-    //         performSearch(value);
-    //       },
-    //       decoration: InputDecoration(
-    //         border: OutlineInputBorder(),
-    //         labelText: 'Search artist',
-    //       ),
-    //     ),
-    //   ),
-    // );
+    List<Widget> widgets = [
+      SearchWidget(
+        onSubmitted: (String query) {
+          performSearch(query);
+        },
+        controller: _searchController,
+      )
+    ];
+
+    widgets.add(
+      Expanded(
+        child: ListView(
+          children: listViewItems,
+        ),
+      ),
+    );
+
+    if (showPlayer) {
+      widgets.add(
+        PlayerControlWidget(
+          isPlaying: isPlaying,
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Column(
-        children: [
-          SearchWidget(
-            onSubmitted: (String query) {
-              performSearch(query);
-            },
-            controller: _searchController,
-          ),
-          Expanded(
-            child: ListView(
-              children: listViewItems,
-            ),
-          ),
-          PlayerControlWidget(
-            isPlaying: isPlaying,
-          ),
-        ],
+        children: widgets,
       ),
     );
   }
