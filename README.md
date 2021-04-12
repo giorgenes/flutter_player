@@ -3,6 +3,11 @@
 Simple media player app that fetches [iTunes API](https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api)
 and allows you to play sample songs.
 
+## Screenshots
+
+![Search Screen](screenshot.jpeg "Player")
+
+
 ## Supported devices
 
 ### Android
