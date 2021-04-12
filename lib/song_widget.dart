@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'song.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class SongWidget extends StatelessWidget {
   final Song song;
+  final AudioPlayer audioPlayer;
 
-  const SongWidget({this.song});
+  const SongWidget({this.song, this.audioPlayer});
 
   void playSong(BuildContext context) {
     OverlayState overlayState = Overlay.of(context);
     RenderBox renderBox = context.findRenderObject();
     var size = renderBox.size;
     var offset = renderBox.localToGlobal(Offset.zero);
+
+    song.play(audioPlayer);
 
     overlayState.insert(
       OverlayEntry(
