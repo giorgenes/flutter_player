@@ -94,6 +94,22 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  pause() async {
+    await player.pause();
+
+    setState(() {
+      isPlaying = false;
+    });
+  }
+
+  resume() async {
+    await player.resume();
+
+    setState(() {
+      isPlaying = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> listViewItems;
@@ -129,6 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
     if (showPlayer) {
       widgets.add(
         PlayerControlWidget(
+          onPause: () {
+            pause();
+          },
+          onPlay: () {
+            resume();
+          },
           isPlaying: isPlaying,
         ),
       );
@@ -144,12 +166,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// Padding(
-// padding: const EdgeInsets.all(15.0),
-// child: ListView(
-// children: listViewItems
-// // TODO: Add padding at the end to account for the play nav at the bottom
-// ,
-// ),
-// )
