@@ -63,8 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
         isPlaying = false;
       });
     });
-
-    performSearch('metallica');
   }
 
   @override
@@ -134,13 +132,32 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     ];
 
-    widgets.add(
-      Expanded(
-        child: ListView(
-          children: listViewItems,
+    if (songs.isEmpty) {
+      widgets.add(
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Center(
+              child: Text(
+                'To start, search for songs/artists in the input above!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25.0,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      widgets.add(
+        Expanded(
+          child: ListView(
+            children: listViewItems,
+          ),
+        ),
+      );
+    }
 
     if (showPlayer) {
       widgets.add(
@@ -157,11 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: widgets,
+      body: SafeArea(
+        child: Column(
+          children: widgets,
+        ),
       ),
     );
   }
