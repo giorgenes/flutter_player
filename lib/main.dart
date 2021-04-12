@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'song_widget.dart';
+import 'package:http/http.dart' as http;
+import 'song.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,85 +54,85 @@ class MyHomePage extends StatefulWidget {
 // MediaQuery.of()
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController _searchController;
+  List<Song> songs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+
+    performSearch('metallica');
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void performSearch(String query) async {
+    //String encQuery = Uri.encodeComponent(query);
+
+    var url = Uri.https(
+        'itunes.apple.com', '/search', {'entity': 'song', 'term': query});
+
+    http.Response response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      var results = json['results'];
+
+      var foundSongs = [
+        for (var song in results)
+          Song(
+            name: song['trackName'],
+            artist: song['artistName'],
+            album: song['collectionName'],
+            coverUrl: song['artworkUrl100'],
+          )
+      ];
+
+      setState(() {
+        this.songs = foundSongs;
+      });
+
+      print(response.body);
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    List<Widget> listViewItems;
+
+    listViewItems = [for (Song song in songs) SongWidget(song: song)];
+    listViewItems.insert(
+      0,
+      Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: TextField(
+          controller: _searchController,
+          onSubmitted: (String value) {
+            performSearch(value);
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Search artist',
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Search artist',
-                ),
-              ),
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            SongWidget(
-              artistName: 'Metallica',
-              songName: 'Harvester of Sorrow',
-              albumName: 'Master of puppets',
-            ),
-            // TODO: Add padding at the end to account for the play nav at the bottom
-          ],
+          children: listViewItems
+          // TODO: Add padding at the end to account for the play nav at the bottom
+          ,
         ),
       ),
     );

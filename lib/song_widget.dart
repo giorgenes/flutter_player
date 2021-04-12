@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'song.dart';
 
 class SongWidget extends StatelessWidget {
-  final String songName;
-  final String artistName;
-  final String albumName;
+  final Song song;
 
-  const SongWidget({this.songName, this.artistName, this.albumName});
+  const SongWidget({this.song});
 
   void playSong(BuildContext context) {
     OverlayState overlayState = Overlay.of(context);
@@ -39,7 +38,7 @@ class SongWidget extends StatelessWidget {
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
-                'https://cdn.shopify.com/s/files/1/0024/9803/5810/products/549076-Product-0-I_1080x.jpg',
+                song.coverUrl,
                 width: 100.0,
                 height: 100.0,
               ),
@@ -55,7 +54,7 @@ class SongWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5.0),
                         child: Text(
-                          songName,
+                          song.name,
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -65,13 +64,13 @@ class SongWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5.0),
                         child: Text(
-                          artistName,
+                          song.artist,
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
                       ),
-                      Text(albumName),
+                      Text(song.album),
                     ],
                   ),
                 ),
