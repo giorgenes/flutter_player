@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'song_widget.dart';
-import 'package:http/http.dart' as http;
 import 'song.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'song_finder.dart';
+import 'player_control_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,16 +38,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _searchController;
+
+  // player related
   List<Song> songs = [];
-  AudioPlayer audioPlayer = AudioPlayer();
+  AudioPlayer player;
+  bool isPlaying = false;
 
   @override
   void initState() {
     super.initState();
+
     _searchController = TextEditingController();
 
-    audioPlayer.onPlayerCompletion.listen((event) {
-      print('song finished!');
+    player = AudioPlayer();
+
+    // update the playing status when the song finishes
+    player.onPlayerCompletion.listen((event) {
+      print('completed');
+
+      setState(() {
+        isPlaying = false;
+      });
     });
 
     performSearch('metallica');
@@ -60,32 +71,35 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void performSearch(String query) async {
-    var url = Uri.https(
-        'itunes.apple.com', '/search', {'entity': 'song', 'term': query});
+    var foundSongs = await SongFinder.findBy(query);
 
-    http.Response response = await http.get(url);
+    setState(() {
+      this.songs = foundSongs;
+    });
+  }
 
-    if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
-      var results = json['results'];
+  play(Song song, BuildContext context) async {
+    int result = await player.play(song.sampleUrl);
 
-      var foundSongs = [
-        for (var song in results)
-          Song(
-            name: song['trackName'],
-            artist: song['artistName'],
-            album: song['collectionName'],
-            coverUrl: song['artworkUrl100'],
-            sampleUrl: song['previewUrl'],
-          )
-      ];
-
+    // success?
+    if (result == 1) {
       setState(() {
-        this.songs = foundSongs;
+        isPlaying = true;
       });
 
-      print(response.body);
-    } else {}
+      OverlayState overlayState = Overlay.of(context);
+
+      overlayState.insert(
+        OverlayEntry(
+          builder: (context) => Positioned(
+            bottom: 0.0,
+            left: 0,
+            right: 0,
+            child: PlayerControlWidget(),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -96,7 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
       for (Song song in songs)
         SongWidget(
           song: song,
-          audioPlayer: audioPlayer,
+          onPlay: (Song song) {
+            play(song, context);
+          },
         )
     ];
 

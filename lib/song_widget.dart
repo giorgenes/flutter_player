@@ -1,33 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'song.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class SongWidget extends StatelessWidget {
   final Song song;
-  final AudioPlayer audioPlayer;
+  final Function onPlay;
+  final bool isPlaying;
 
-  const SongWidget({this.song, this.audioPlayer});
-
-  void playSong(BuildContext context) {
-    OverlayState overlayState = Overlay.of(context);
-    RenderBox renderBox = context.findRenderObject();
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
-    song.play(audioPlayer);
-
-    overlayState.insert(
-      OverlayEntry(
-        builder: (context) => Positioned(
-          bottom: 0.0,
-          left: 0,
-          right: 0,
-          child: PlayerControlWidget(),
-        ),
-      ),
-    );
-  }
+  const SongWidget({this.song, this.onPlay, this.isPlaying});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +15,7 @@ class SongWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: GestureDetector(
         onTap: () {
-          playSong(context);
+          onPlay(song);
         },
         child: Container(
           child: Row(
@@ -86,33 +66,6 @@ class SongWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PlayerControlWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blueGrey,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.fast_rewind,
-                color: Colors.green,
-                size: 60.0,
-              ),
-              Icon(Icons.play_arrow, color: Colors.green, size: 60.0),
-              Icon(Icons.fast_forward, color: Colors.green, size: 60.0),
-            ],
-          )
-        ],
       ),
     );
   }
