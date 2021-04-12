@@ -7,6 +7,8 @@ class PlayerControlWidget extends StatelessWidget {
   final Function onPlay;
   final Function onPause;
 
+  static Color buttonColor = Color(0xFFE91E63);
+
   PlayerControlWidget(
       {this.isPlaying,
       this.onRewind,
@@ -16,40 +18,34 @@ class PlayerControlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget playPauseButton;
-
     return Container(
+      height: 100.0,
       decoration: BoxDecoration(
         color: Colors.blueGrey,
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: onRewind,
-                child: Icon(
-                  Icons.fast_rewind,
-                  color: Colors.green,
-                  size: 60.0,
-                ),
-              ),
-              GestureDetector(
-                onTap: isPlaying ? onPause : onPlay,
-                child: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.green,
-                  size: 60.0,
-                ),
-              ),
-              GestureDetector(
-                onTap: onForward,
-                child:
-                    Icon(Icons.fast_forward, color: Colors.green, size: 60.0),
-              ),
-            ],
-          )
+          GestureDetector(
+            onTap: onRewind,
+            child: Icon(
+              Icons.fast_rewind,
+              color: Colors.white,
+              size: 60.0,
+            ),
+          ),
+          GestureDetector(
+            onTap: isPlaying ? onPause : onPlay,
+            child: Icon(
+              isPlaying ? Icons.pause : Icons.play_circle_fill,
+              color: buttonColor,
+              size: 80.0,
+            ),
+          ),
+          GestureDetector(
+            onTap: onForward,
+            child: Icon(Icons.fast_forward, color: Colors.white, size: 60.0),
+          ),
         ],
       ),
     );

@@ -1,16 +1,30 @@
 # sample_player_app
 
-Sample media player app
+Simple media player app that fetches [iTunes API](https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api)
+and allows you to play sample songs.
 
-## Getting Started
+## Supported devices
 
-This project is a starting point for a Flutter application.
+### Android
+- minSdkVersion 16 (Android 4.1 Jelly bean)
+- targetSdkVersion 30 (Android 11)
+- Tested on Pixel 3
 
-A few resources to get you started if this is your first Flutter project:
+## Supported features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Song and artist search
+- Song playback and pause
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features pending
+
+- Skip and rewind songs
+
+## Requirements to build the app
+
+Build with Flutter 2.0.3 and Dart 2.12.2.
+
+## Instructions to build and deploy the app
+
+  $ flutter pub get
+  $ flutter run lib/main.dart
+

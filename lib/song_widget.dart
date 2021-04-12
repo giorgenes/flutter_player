@@ -28,7 +28,7 @@ class SongWidget extends StatelessWidget {
         onTap: () {
           onPlay(song);
         },
-        child: Container(
+        child: Card(
           child: Row(
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,7 +70,10 @@ class SongWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              statusWidget,
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: statusWidget,
+              ),
             ],
           ),
         ),
