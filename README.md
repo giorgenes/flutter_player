@@ -25,6 +25,9 @@ Build with Flutter 2.0.3 and Dart 2.12.2.
 
 ## Instructions to build and deploy the app
 
-  $ flutter pub get
-  $ flutter run lib/main.dart
+```bash
+flutter pub get
+flutter run lib/main.dart
+```
+
 
