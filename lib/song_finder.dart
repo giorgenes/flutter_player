@@ -29,6 +29,7 @@ class SongFinder {
       return foundSongs;
     }
 
+    // TODO: handle error here/make it null safe
     return null;
   }
 }
