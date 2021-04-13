@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../song.dart';
 
+const TextStyle songNameStyle = TextStyle(
+  fontSize: 20.0,
+  fontWeight: FontWeight.bold,
+);
+
+const TextStyle artistStyle = TextStyle(fontSize: 16.0);
+
+const textPadding = EdgeInsets.only(bottom: 5.0);
+
+// The song card widget (cover art and song name, artist, etc)
 class SongWidget extends StatelessWidget {
   final Song song;
   final Function onPlay;
@@ -11,17 +21,6 @@ class SongWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget statusWidget;
-
-    if (isPlaying) {
-      statusWidget = SpinKitWave(
-        color: Colors.black,
-        size: 25.0,
-      );
-    } else {
-      statusWidget = Icon(Icons.play_arrow, size: 45.0);
-    }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0, left: 15.0, right: 15.0),
       child: GestureDetector(
@@ -37,42 +36,10 @@ class SongWidget extends StatelessWidget {
                 width: 100.0,
                 height: 100.0,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
-                        child: Text(
-                          song.name,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
-                        child: Text(
-                          song.artist,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                      Text(song.album),
-                    ],
-                  ),
-                ),
-              ),
+              buildSongDetails(),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: statusWidget,
+                child: isPlaying ? buildPlayingStatus() : buildPlayArrow(),
               ),
             ],
           ),
@@ -80,4 +47,40 @@ class SongWidget extends StatelessWidget {
       ),
     );
   }
+
+  // Builds a column with the song name, artist and album
+  Widget buildSongDetails() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: textPadding,
+              child: Text(song.name, style: songNameStyle),
+            ),
+            Padding(
+              padding: textPadding,
+              child: Text(song.artist, style: artistStyle),
+            ),
+            Text(song.album),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // The "playing" status indicator animation
+  Widget buildPlayingStatus() {
+    return SpinKitWave(
+      color: Colors.black,
+      size: 25.0,
+    );
+  }
+
+  Icon buildPlayArrow() => Icon(Icons.play_arrow, size: 45.0);
 }

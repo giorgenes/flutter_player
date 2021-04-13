@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Builds the bottom player control with the play/skip/pause buttons
 class PlayerControlWidget extends StatelessWidget {
   final bool isPlaying;
   final Function onRewind;
@@ -26,27 +27,37 @@ class PlayerControlWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: onRewind,
-            child: Icon(
-              Icons.fast_rewind,
-              color: Colors.white,
-              size: 60.0,
-            ),
-          ),
-          GestureDetector(
-            onTap: isPlaying ? onPause : onPlay,
-            child: Icon(
-              isPlaying ? Icons.pause : Icons.play_circle_fill,
-              color: buttonColor,
-              size: 80.0,
-            ),
-          ),
-          GestureDetector(
-            onTap: onForward,
-            child: Icon(Icons.fast_forward, color: Colors.white, size: 60.0),
-          ),
+          buildRewindButton(),
+          buildPlayButton(),
+          buildForwardButton(),
         ],
+      ),
+    );
+  }
+
+  Widget buildRewindButton() => GestureDetector(
+        onTap: onRewind,
+        child: Icon(
+          Icons.fast_rewind,
+          color: Colors.white,
+          size: 60.0,
+        ),
+      );
+
+  Widget buildForwardButton() {
+    return GestureDetector(
+      onTap: onForward,
+      child: Icon(Icons.fast_forward, color: Colors.white, size: 60.0),
+    );
+  }
+
+  Widget buildPlayButton() {
+    return GestureDetector(
+      onTap: isPlaying ? onPause : onPlay,
+      child: Icon(
+        isPlaying ? Icons.pause : Icons.play_circle_fill,
+        color: buttonColor,
+        size: 80.0,
       ),
     );
   }

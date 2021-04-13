@@ -49,6 +49,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     super.dispose();
   }
 
+  // perform the query on iTunes and update the state with new songs
   void performSearch(String query) async {
     var foundSongs = await SongFinder.findBy(query);
 
@@ -57,6 +58,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     });
   }
 
+  // starts playing the selected song
   play(Song song, BuildContext context) async {
     int result = await player.play(song.sampleUrl);
 
@@ -70,6 +72,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     }
   }
 
+  // pause the current song
   pause() async {
     await player.pause();
 
@@ -78,6 +81,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     });
   }
 
+  // resume playing the current song
   resume() async {
     await player.resume();
 
@@ -86,6 +90,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     });
   }
 
+  // creates the song list widgets from the existing
+  // song list
   List<Widget> buildSongWidgets() {
     return ([
       for (Song song in songs)
@@ -99,6 +105,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     ]);
   }
 
+  // search input widget
   Widget buildSearchWidget() => SearchWidget(
         onSubmitted: (String query) {
           performSearch(query);
@@ -106,6 +113,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         controller: _searchController,
       );
 
+  // Empty list placeholder message
   Widget buildEmptyPlaceholder() => Expanded(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -121,12 +129,14 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         ),
       );
 
+  // Song List view widget
   Widget buildSongList() => Expanded(
         child: ListView(
           children: buildSongWidgets(),
         ),
       );
 
+  // Builds the bottom player controller widget
   Widget buildControlWidget() => PlayerControlWidget(
         onPause: () {
           pause();
@@ -139,14 +149,17 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Start with the search bar...
     List<Widget> widgets = [buildSearchWidget()];
 
+    // Adds the song list or the placeholder message
     if (songs.isEmpty) {
       widgets.add(buildEmptyPlaceholder());
     } else {
       widgets.add(buildSongList());
     }
 
+    // if player control is visible, add it
     if (showPlayer) {
       widgets.add(buildControlWidget());
     }

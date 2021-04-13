@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// The text field for searching the songs
 class SearchWidget extends StatelessWidget {
   final Function onSubmitted;
   final TextEditingController controller;
